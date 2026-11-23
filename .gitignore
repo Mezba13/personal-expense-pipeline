@@ -1,0 +1,6 @@
+.env
+.env.neon
+.venv/
+__pycache__/
+*.csv
+.vscode/
