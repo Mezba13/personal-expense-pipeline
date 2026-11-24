@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 Base_Dir=Path(__file__).resolve().parent
-load_dotenv(Base_Dir / ".env") 
+load_dotenv(Base_Dir / os.getenv("ENV_FILE", ".env"))
 
 def run_sql_file(conn,path):
     sql_text=Path(path).read_text(encoding='utf-8')
@@ -18,12 +18,15 @@ def run_sql_file(conn,path):
 def main():
     conn=None
     try:
+        logging.info("Connecting to host: %s", os.getenv("DB_HOST"))
         conn=psycopg.connect(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
         dbname=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"))
+        password=os.getenv("DB_PASSWORD"),
+        sslmode=os.getenv("DB_SSLMODE", "prefer"),)
+
         logging.info("Database connection established successfully.")
         with conn.cursor() as cur:
             cur.execute("Create schema if not exists bronze;")
@@ -44,11 +47,13 @@ def main():
         conn.commit()
         logging.info("Database setup completed successfully.")
     except Exception:
-        conn.rollback()
+        if conn:
+            conn.rollback()
         logging.exception("Database setup failed, rolled back")
         raise
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 
 if __name__ == "__main__":
