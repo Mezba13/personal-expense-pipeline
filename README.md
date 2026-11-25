@@ -111,7 +111,6 @@ DB_PORT=5433
 DB_NAME=finance_de
 DB_USER=postgres
 DB_PASSWORD=your_password
-DB_SSLMODE=prefer
 
 CSV_PATH=data/expense_data_1.csv
 ```
