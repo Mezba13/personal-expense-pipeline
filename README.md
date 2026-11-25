@@ -369,5 +369,4 @@ Note (8, empty)	empty_note
 Amount (9)	amount
 Currency (10)	currency
 Account (11, numeric duplicate of Amount)	raw_account
-
 All 11 source columns are preserved in Bronze. The Silver layer retains the fields required for transaction-level analysis.
