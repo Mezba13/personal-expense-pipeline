@@ -355,18 +355,20 @@ FROM daily_spending;
 
 ## Column Mapping
 
-The original CSV fields are mapped to the Bronze table in their source order.
+The source CSV contains 11 columns. The following table shows how each CSV header maps to its corresponding Bronze column.
 
-CSV header (position)	Bronze column
-Date (1)	transaction_date
-Account (2)	payment_method
-Category (3)	category
-Subcategory (4)	subcategory
-Note (5)	expense_item
-INR (6)	inr_amount
-Income/Expense (7)	transaction_type
-Note (8, empty)	empty_note
-Amount (9)	amount
-Currency (10)	currency
-Account (11, numeric duplicate of Amount)	raw_account
-All 11 source columns are preserved in Bronze. The Silver layer retains the fields required for transaction-level analysis.
+| CSV Header (Position) | Bronze Column |
+|---|---|
+| Date (1) | `transaction_date` |
+| Account (2) | `payment_method` |
+| Category (3) | `category` |
+| Subcategory (4) | `subcategory` |
+| Note (5) | `expense_item` |
+| INR (6) | `inr_amount` |
+| Income/Expense (7) | `transaction_type` |
+| Note (8, empty) | `empty_note` |
+| Amount (9) | `amount` |
+| Currency (10) | `currency` |
+| Account (11, numeric duplicate of Amount) | `raw_account` |
+
+All 11 source columns are initially preserved in the Bronze layer as TEXT. During Silver transformation, unused or redundant columns are excluded, while the remaining fields are converted into appropriate data types for analysis.
